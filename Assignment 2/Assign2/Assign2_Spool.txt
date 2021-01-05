@@ -1,0 +1,687 @@
+SQL> 
+SQL> 
+SQL> START "D:\Semester III\Database I\Assignments\Assign2\dropRiverTables.sql";
+SQL> --dropRiverTables.sql
+SQL> --Name: Marissa Gonçalves
+SQL> --Due Date: November 16, 2018
+SQL> 
+SQL> 
+SQL> --Part 3: Populate the Tables and Show Contents
+SQL> 
+SQL> --b)
+SQL> 
+SQL> DROP TABLE CUSTOMER CASCADE CONSTRAINTS;
+
+Table dropped.
+
+SQL> DROP TABLE ITEM CASCADE CONSTRAINTS;
+
+Table dropped.
+
+SQL> DROP TABLE PURCHASE CASCADE CONSTRAINTS;
+
+Table dropped.
+
+SQL> DROP TABLE PURCHASE_ITEM CASCADE CONSTRAINTS;
+
+Table dropped.
+
+SQL> 
+SQL> START "D:\Semester III\Database I\Assignments\Assign2\createRiverTables.sql";
+SQL> --createRiverTables.sql
+SQL> --Name: Marissa Gonçalves
+SQL> --Due Date: November 16, 2018
+SQL> 
+SQL> 
+SQL> --Part 2: Build the Tables
+SQL> 
+SQL> 
+SQL> CREATE TABLE CUSTOMER
+  2  (CustomerID NUMBER(10),
+  3  LastName VARCHAR(20) NOT NULL,
+  4  FirstName VARCHAR2(20) NOT NULL,
+  5  Phone  VARCHAR2(12) DEFAULT NULL,
+  6  Email VARCHAR2(20) DEFAULT NULL,
+  7  CONSTRAINT CUSTOMER_CustomerID_PK PRIMARY KEY(CustomerID));
+
+Table created.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> CREATE TABLE ITEM
+  2  (ItemID NUMBER(6),
+  3  Description VARCHAR2(50) NOT NULL,
+  4  Cost NUMERIC(9,2) NOT NULL,
+  5  ArtistName VARCHAR2(40) NULL,
+  6  CONSTRAINT ITEM_ItemID_PK PRIMARY KEY(ItemID));
+
+Table created.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> CREATE TABLE PURCHASE
+  2  (InvoiceNumber NUMBER(10),
+  3  InvoiceDate DATE DEFAULT SYSDATE,
+  4  CustomerID NUMBER(10) NOT NULL,
+  5  CONSTRAINT PURCHASE_InvoiceNumber_PK PRIMARY KEY(InvoiceNumber),
+  6  CONSTRAINT PURCHASE_CustomerID_FK FOREIGN KEY(CustomerID) REFERENCES CUSTOMER(CustomerID));
+
+Table created.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> CREATE TABLE PURCHASE_ITEM
+  2  (InvoiceNumber NUMBER(10),
+  3  ItemID NUMBER(6),
+  4  ItemQuantity NUMBER(10),
+  5  ItemRetailPrice NUMERIC(9,2) NOT NULL,
+  6  CONSTRAINT PURCHASE_ITEM_PK PRIMARY KEY(InvoiceNumber, ItemID),
+  7  CONSTRAINT PURCHASE_ITEM_InvoiceNumber_FK FOREIGN KEY(InvoiceNumber) REFERENCES PURCHASE(InvoiceNumber),
+  8  CONSTRAINT PURCHASE_ITEM_ItemID_FK FOREIGN KEY(ItemID) REFERENCES ITEM(ItemID));
+
+Table created.
+
+SQL> 
+SQL> START "D:\Semester III\Database I\Assignments\Assign2\loadRiverTables.sql";
+SQL> --loadRiverTables.sql
+SQL> --Name: Marissa Gonçalves
+SQL> --Due Date: November 16, 2018
+SQL> 
+SQL> 
+SQL> --Part 3: Populate the Tables and Show Contents
+SQL> 
+SQL> --a)
+SQL> 
+SQL> /*****   CUSTOMER DATA   *****************************************************/
+SQL> 
+SQL> INSERT INTO CUSTOMER VALUES(
+  2  	     1,'Stanley', 'Elizabeth','555-236-7789', 'ES@somewhere.com');
+
+1 row created.
+
+SQL> INSERT INTO CUSTOMER VALUES(
+  2  	     2,'Price', 'Fred', '555-236-0091', 'FP@somewhere.com');
+
+1 row created.
+
+SQL> INSERT INTO CUSTOMER VALUES(
+  2  	     3,'Becky', 'Linda', '555-236-0392', 'LB@somewhere.com');
+
+1 row created.
+
+SQL> INSERT INTO CUSTOMER VALUES(
+  2  	     4,'Birch', 'Pamela', '555-236-4493', 'PB@somewhere.com');
+
+1 row created.
+
+SQL> INSERT INTO CUSTOMER VALUES(
+  2  	     5,'Romez', 'Ricardo', '555-236-3334', 'RR@somewhere.com');
+
+1 row created.
+
+SQL> INSERT INTO CUSTOMER VALUES(
+  2  	     6,'Jackson', 'Samantha', '555-236-1095', 'SJ@somewhere.com');
+
+1 row created.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> /*****   ITEM DATA   ************************************************************/
+SQL> 
+SQL> INSERT INTO ITEM VALUES(1,'Gold Bracelet',   120.00, 'Mary Josephson');
+
+1 row created.
+
+SQL> INSERT INTO ITEM VALUES(2,'Gold Necklace',   100.00, 'Baker');
+
+1 row created.
+
+SQL> INSERT INTO ITEM VALUES(3,'Bead Earrings',    50.00, 'Mary Josephson');
+
+1 row created.
+
+SQL> INSERT INTO ITEM VALUES(4,'Gold Bracelet',   180.00, 'Baker');
+
+1 row created.
+
+SQL> INSERT INTO ITEM VALUES(5,'Silver Necklace',  35.00, 'Baxter');
+
+1 row created.
+
+SQL> INSERT INTO ITEM VALUES(6,'Bead Earrings',    25.00, 'Mary Josephson');
+
+1 row created.
+
+SQL> INSERT INTO ITEM VALUES(7,'Bead Earrings',    22.50, 'Mary Josephson');
+
+1 row created.
+
+SQL> INSERT INTO ITEM VALUES(8,'Gold Earrings',    50.00, 'John Lintz');
+
+1 row created.
+
+SQL> INSERT INTO ITEM VALUES(9,'Gold Necklace',   160.00, 'John Lintz');
+
+1 row created.
+
+SQL> INSERT INTO ITEM VALUES(10,'Bead Earrings',   12.00, 'Mary Josephson');
+
+1 row created.
+
+SQL> INSERT INTO ITEM VALUES(11,'Bead Earrings',   35.00, 'Mary Josephson');
+
+1 row created.
+
+SQL> INSERT INTO ITEM VALUES(12,'Bead Earrings',    4.00, 'Mary Josephson');
+
+1 row created.
+
+SQL> INSERT INTO ITEM VALUES(13,'Gold Necklace',  225.00, 'John Lintz');
+
+1 row created.
+
+SQL> INSERT INTO ITEM VALUES(14,'Silver Earrings', 55.00, 'John Lintz');
+
+1 row created.
+
+SQL> INSERT INTO ITEM VALUES(15,'Gold Bracelet',  200.00, 'John Lintz');
+
+1 row created.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> /*****   PURCHASE	 *************************************************************/
+SQL> 
+SQL> INSERT INTO PURCHASE VALUES(1, to_date('05-05-15', 'DD-MM-YY'),  1);
+
+1 row created.
+
+SQL> INSERT INTO PURCHASE VALUES(2, to_date('07-05-15', 'DD-MM-YY'),  2);
+
+1 row created.
+
+SQL> INSERT INTO PURCHASE VALUES(3, to_date('11-05-15', 'DD-MM-YY'),  3);
+
+1 row created.
+
+SQL> INSERT INTO PURCHASE VALUES(4, to_date('15-05-15', 'DD-MM-YY'),  4);
+
+1 row created.
+
+SQL> INSERT INTO PURCHASE VALUES(5, to_date('15-05-15', 'DD-MM-YY'),  5);
+
+1 row created.
+
+SQL> INSERT INTO PURCHASE VALUES(6, to_date('16-05-15', 'DD-MM-YY'),  1);
+
+1 row created.
+
+SQL> INSERT INTO PURCHASE VALUES(7, to_date('16-05-15', 'DD-MM-YY'),  3);
+
+1 row created.
+
+SQL> INSERT INTO PURCHASE VALUES(8, to_date('18-05-15', 'DD-MM-YY'),  1);
+
+1 row created.
+
+SQL> INSERT INTO PURCHASE VALUES(9, to_date('19-05-15', 'DD-MM-YY'),  6);
+
+1 row created.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> /*****   PURCHASE_ITEM DATA   ***************************************************/
+SQL> 
+SQL> INSERT INTO PURCHASE_ITEM VALUES(1,  1, 1, 155.00);
+
+1 row created.
+
+SQL> INSERT INTO PURCHASE_ITEM VALUES(2,  2, 2, 120.00);
+
+1 row created.
+
+SQL> INSERT INTO PURCHASE_ITEM VALUES(3,  3, 1,  75.00);
+
+1 row created.
+
+SQL> INSERT INTO PURCHASE_ITEM VALUES(4,  6, 2,  40.00);
+
+1 row created.
+
+SQL> INSERT INTO PURCHASE_ITEM VALUES(4,  7, 1,  32.00);
+
+1 row created.
+
+SQL> INSERT INTO PURCHASE_ITEM VALUES(5,  4, 3, 250.00);
+
+1 row created.
+
+SQL> INSERT INTO PURCHASE_ITEM VALUES(5,  8, 1,  90.00);
+
+1 row created.
+
+SQL> INSERT INTO PURCHASE_ITEM VALUES(6, 10, 1,  36.00);
+
+1 row created.
+
+SQL> INSERT INTO PURCHASE_ITEM VALUES(7, 11, 1,  45.00);
+
+1 row created.
+
+SQL> INSERT INTO PURCHASE_ITEM VALUES(8,  5, 1,  50.00);
+
+1 row created.
+
+SQL> INSERT INTO PURCHASE_ITEM VALUES(8, 10, 4,  24.00);
+
+1 row created.
+
+SQL> INSERT INTO PURCHASE_ITEM VALUES(8, 12, 1,   8.00);
+
+1 row created.
+
+SQL> INSERT INTO PURCHASE_ITEM VALUES(9, 14, 2,  72.00);
+
+1 row created.
+
+SQL> 
+SQL> 
+SQL> /****************************************************************************************/
+SQL> 
+SQL> START "D:\Semester III\Database I\Assignments\Assign2\showRiverTables.sql";
+SQL> --showRiverTables.sql
+SQL> --Name: Marissa Gonçalves
+SQL> --Due Date: November 16, 2018
+SQL> 
+SQL> 
+SQL> --Part 3: Populate the Tables and Show Contents
+SQL> 
+SQL> --c)
+SQL> 
+SQL> DESCRIBE CUSTOMER;
+ Name                                                                                                  Null?    Type
+ ----------------------------------------------------------------------------------------------------- -------- --------------------------------------------------------------------
+ CUSTOMERID                                                                                            NOT NULL NUMBER(10)
+ LASTNAME                                                                                              NOT NULL VARCHAR2(20)
+ FIRSTNAME                                                                                             NOT NULL VARCHAR2(20)
+ PHONE                                                                                                          VARCHAR2(12)
+ EMAIL                                                                                                          VARCHAR2(20)
+
+SQL> DESCRIBE ITEM;
+ Name                                                                                                  Null?    Type
+ ----------------------------------------------------------------------------------------------------- -------- --------------------------------------------------------------------
+ ITEMID                                                                                                NOT NULL NUMBER(6)
+ DESCRIPTION                                                                                           NOT NULL VARCHAR2(50)
+ COST                                                                                                  NOT NULL NUMBER(9,2)
+ ARTISTNAME                                                                                                     VARCHAR2(40)
+
+SQL> DESCRIBE PURCHASE;
+ Name                                                                                                  Null?    Type
+ ----------------------------------------------------------------------------------------------------- -------- --------------------------------------------------------------------
+ INVOICENUMBER                                                                                         NOT NULL NUMBER(10)
+ INVOICEDATE                                                                                                    DATE
+ CUSTOMERID                                                                                            NOT NULL NUMBER(10)
+
+SQL> DESCRIBE PURCHASE_ITEM;
+ Name                                                                                                  Null?    Type
+ ----------------------------------------------------------------------------------------------------- -------- --------------------------------------------------------------------
+ INVOICENUMBER                                                                                         NOT NULL NUMBER(10)
+ ITEMID                                                                                                NOT NULL NUMBER(6)
+ ITEMQUANTITY                                                                                                   NUMBER(10)
+ ITEMRETAILPRICE                                                                                       NOT NULL NUMBER(9,2)
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> SELECT * FROM CUSTOMER;
+
+CUSTOMERID LASTNAME             FIRSTNAME            PHONE        EMAIL                                                                                                             
+---------- -------------------- -------------------- ------------ --------------------                                                                                              
+         1 Stanley              Elizabeth            555-236-7789 ES@somewhere.com                                                                                                  
+         2 Price                Fred                 555-236-0091 FP@somewhere.com                                                                                                  
+         3 Becky                Linda                555-236-0392 LB@somewhere.com                                                                                                  
+         4 Birch                Pamela               555-236-4493 PB@somewhere.com                                                                                                  
+         5 Romez                Ricardo              555-236-3334 RR@somewhere.com                                                                                                  
+         6 Jackson              Samantha             555-236-1095 SJ@somewhere.com                                                                                                  
+
+6 rows selected.
+
+SQL> 
+SQL> 
+SQL> SELECT * FROM ITEM;
+
+    ITEMID DESCRIPTION                                              COST ARTISTNAME                                                                                                 
+---------- -------------------------------------------------- ---------- ----------------------------------------                                                                   
+         1 Gold Bracelet                                             120 Mary Josephson                                                                                             
+         2 Gold Necklace                                             100 Baker                                                                                                      
+         3 Bead Earrings                                              50 Mary Josephson                                                                                             
+         4 Gold Bracelet                                             180 Baker                                                                                                      
+         5 Silver Necklace                                            35 Baxter                                                                                                     
+         6 Bead Earrings                                              25 Mary Josephson                                                                                             
+         7 Bead Earrings                                            22.5 Mary Josephson                                                                                             
+         8 Gold Earrings                                              50 John Lintz                                                                                                 
+         9 Gold Necklace                                             160 John Lintz                                                                                                 
+        10 Bead Earrings                                              12 Mary Josephson                                                                                             
+        11 Bead Earrings                                              35 Mary Josephson                                                                                             
+        12 Bead Earrings                                               4 Mary Josephson                                                                                             
+        13 Gold Necklace                                             225 John Lintz                                                                                                 
+        14 Silver Earrings                                            55 John Lintz                                                                                                 
+        15 Gold Bracelet                                             200 John Lintz                                                                                                 
+
+15 rows selected.
+
+SQL> 
+SQL> 
+SQL> SELECT * FROM PURCHASE;
+
+INVOICENUMBER INVOICEDA CUSTOMERID                                                                                                                                                  
+------------- --------- ----------                                                                                                                                                  
+            1 05-MAY-15          1                                                                                                                                                  
+            2 07-MAY-15          2                                                                                                                                                  
+            3 11-MAY-15          3                                                                                                                                                  
+            4 15-MAY-15          4                                                                                                                                                  
+            5 15-MAY-15          5                                                                                                                                                  
+            6 16-MAY-15          1                                                                                                                                                  
+            7 16-MAY-15          3                                                                                                                                                  
+            8 18-MAY-15          1                                                                                                                                                  
+            9 19-MAY-15          6                                                                                                                                                  
+
+9 rows selected.
+
+SQL> 
+SQL> 
+SQL> SELECT * fROM PURCHASE_ITEM;
+
+INVOICENUMBER     ITEMID ITEMQUANTITY ITEMRETAILPRICE                                                                                                                               
+------------- ---------- ------------ ---------------                                                                                                                               
+            1          1            1             155                                                                                                                               
+            2          2            2             120                                                                                                                               
+            3          3            1              75                                                                                                                               
+            4          6            2              40                                                                                                                               
+            4          7            1              32                                                                                                                               
+            5          4            3             250                                                                                                                               
+            5          8            1              90                                                                                                                               
+            6         10            1              36                                                                                                                               
+            7         11            1              45                                                                                                                               
+            8          5            1              50                                                                                                                               
+            8         10            4              24                                                                                                                               
+            8         12            1               8                                                                                                                               
+            9         14            2              72                                                                                                                               
+
+13 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> SELECT TABLE_NAME, CONSTRAINT_NAME, CONSTRAINT_TYPE, SEARCH_CONDITION
+  2  FROM USER_CONSTRAINTS
+  3  WHERE TABLE_NAME = 'CUSTOMER';
+
+TABLE_NAME                     CONSTRAINT_NAME                C SEARCH_CONDITION                                                                                                    
+------------------------------ ------------------------------ - --------------------------------------------------------------------------------                                    
+CUSTOMER                       SYS_C007137                    C "LASTNAME" IS NOT NULL                                                                                              
+CUSTOMER                       SYS_C007138                    C "FIRSTNAME" IS NOT NULL                                                                                             
+CUSTOMER                       CUSTOMER_CUSTOMERID_PK         P                                                                                                                     
+
+SQL> 
+SQL> 
+SQL> SELECT TABLE_NAME, CONSTRAINT_NAME, CONSTRAINT_TYPE, SEARCH_CONDITION
+  2  FROM USER_CONSTRAINTS
+  3  WHERE TABLE_NAME = 'ITEM';
+
+TABLE_NAME                     CONSTRAINT_NAME                C SEARCH_CONDITION                                                                                                    
+------------------------------ ------------------------------ - --------------------------------------------------------------------------------                                    
+ITEM                           SYS_C007140                    C "DESCRIPTION" IS NOT NULL                                                                                           
+ITEM                           SYS_C007141                    C "COST" IS NOT NULL                                                                                                  
+ITEM                           ITEM_ITEMID_PK                 P                                                                                                                     
+
+SQL> 
+SQL> 
+SQL> SELECT TABLE_NAME, CONSTRAINT_NAME, CONSTRAINT_TYPE, SEARCH_CONDITION
+  2  FROM USER_CONSTRAINTS
+  3  WHERE TABLE_NAME = 'PURCHASE';
+
+TABLE_NAME                     CONSTRAINT_NAME                C SEARCH_CONDITION                                                                                                    
+------------------------------ ------------------------------ - --------------------------------------------------------------------------------                                    
+PURCHASE                       SYS_C007143                    C "CUSTOMERID" IS NOT NULL                                                                                            
+PURCHASE                       PURCHASE_INVOICENUMBER_PK      P                                                                                                                     
+PURCHASE                       PURCHASE_CUSTOMERID_FK         R                                                                                                                     
+
+SQL> 
+SQL> 
+SQL> SELECT TABLE_NAME, CONSTRAINT_NAME, CONSTRAINT_TYPE, SEARCH_CONDITION
+  2  FROM USER_CONSTRAINTS
+  3  WHERE TABLE_NAME = 'PURCHASE_ITEM';
+
+TABLE_NAME                     CONSTRAINT_NAME                C SEARCH_CONDITION                                                                                                    
+------------------------------ ------------------------------ - --------------------------------------------------------------------------------                                    
+PURCHASE_ITEM                  SYS_C007146                    C "ITEMRETAILPRICE" IS NOT NULL                                                                                       
+PURCHASE_ITEM                  PURCHASE_ITEM_PK               P                                                                                                                     
+PURCHASE_ITEM                  PURCHASE_ITEM_INVOICENUMBER_FK R                                                                                                                     
+PURCHASE_ITEM                  PURCHASE_ITEM_ITEMID_FK        R                                                                                                                     
+
+SQL> 
+SQL> 
+SQL> 
+SQL> --Part 4: Query Questions
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 1:
+SQL> 
+SQL> SELECT SUM(ItemQuantity) AS "Total Items Sold"
+  2  FROM PURCHASE_ITEM;
+
+Total Items Sold                                                                                                                                                                    
+----------------                                                                                                                                                                    
+              21                                                                                                                                                                    
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 2:
+SQL> 
+SQL> SELECT SUM(ItemQuantity * ItemRetailPrice) AS "Total Sales Amount"
+  2  FROM PURCHASE_ITEM;
+
+Total Sales Amount                                                                                                                                                                  
+------------------                                                                                                                                                                  
+              1801                                                                                                                                                                  
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 3:
+SQL> 
+SQL> SELECT InvoiceNumber, SUM(ItemQuantity) AS "Items Number per Invoice"
+  2  FROM PURCHASE_ITEM
+  3  GROUP BY InvoiceNumber
+  4  ORDER BY InvoiceNumber;
+
+INVOICENUMBER Items Number per Invoice                                                                                                                                              
+------------- ------------------------                                                                                                                                              
+            1                        1                                                                                                                                              
+            2                        2                                                                                                                                              
+            3                        1                                                                                                                                              
+            4                        3                                                                                                                                              
+            5                        4                                                                                                                                              
+            6                        1                                                                                                                                              
+            7                        1                                                                                                                                              
+            8                        6                                                                                                                                              
+            9                        2                                                                                                                                              
+
+9 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 4:
+SQL> 
+SQL> SELECT InvoiceNumber, SUM(ItemQuantity * ItemRetailPrice) AS "Sales Amount per Invoice"
+  2  FROM PURCHASE_ITEM
+  3  GROUP BY InvoiceNumber
+  4  ORDER BY InvoiceNumber;
+
+INVOICENUMBER Sales Amount per Invoice                                                                                                                                              
+------------- ------------------------                                                                                                                                              
+            1                      155                                                                                                                                              
+            2                      240                                                                                                                                              
+            3                       75                                                                                                                                              
+            4                      112                                                                                                                                              
+            5                      840                                                                                                                                              
+            6                       36                                                                                                                                              
+            7                       45                                                                                                                                              
+            8                      154                                                                                                                                              
+            9                      144                                                                                                                                              
+
+9 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 5:
+SQL> 
+SQL> SELECT InvoiceNumber, SUM(ItemQuantity * ItemRetailPrice) AS "Sales Amount from Highest"
+  2  FROM PURCHASE_ITEM
+  3  GROUP BY InvoiceNumber
+  4  ORDER BY SUM(ItemQuantity * ItemRetailPrice) DESC;
+
+INVOICENUMBER Sales Amount from Highest                                                                                                                                             
+------------- -------------------------                                                                                                                                             
+            5                       840                                                                                                                                             
+            2                       240                                                                                                                                             
+            1                       155                                                                                                                                             
+            8                       154                                                                                                                                             
+            9                       144                                                                                                                                             
+            4                       112                                                                                                                                             
+            3                        75                                                                                                                                             
+            7                        45                                                                                                                                             
+            6                        36                                                                                                                                             
+
+9 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 6:
+SQL> 
+SQL> COLUMN CostAmount FORMAT 999.99 HEADING "Average Invoice Amount";
+SQL> 
+SQL> SELECT AVG(ItemQuantity * ItemRetailPrice) CostAmount
+  2  FROM PURCHASE_ITEM;
+
+Average Invoice Amount                                                                                                                                                              
+----------------------                                                                                                                                                              
+                138.54                                                                                                                                                              
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 7:
+SQL> 
+SQL> COLUMN SalesAmount FORMAT $999.99 HEADING "Total With Tax";
+SQL> 
+SQL> SELECT InvoiceNumber, SUM(ItemQuantity * ItemRetailPrice) AS "Sales Amount per Invoice",  (SUM(ItemQuantity * ItemRetailPrice) * 1.15) SalesAmount
+  2  FROM PURCHASE_ITEM
+  3  GROUP BY InvoiceNumber
+  4  ORDER BY InvoiceNumber;
+
+INVOICENUMBER Sales Amount per Invoice Total With Tax                                                                                                                               
+------------- ------------------------ --------------                                                                                                                               
+            1                      155        $178.25                                                                                                                               
+            2                      240        $276.00                                                                                                                               
+            3                       75         $86.25                                                                                                                               
+            4                      112        $128.80                                                                                                                               
+            5                      840        $966.00                                                                                                                               
+            6                       36         $41.40                                                                                                                               
+            7                       45         $51.75                                                                                                                               
+            8                      154        $177.10                                                                                                                               
+            9                      144        $165.60                                                                                                                               
+
+9 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 8:
+SQL> 
+SQL> COLUMN CostFormat FORMAT $999.99 HEADING "COST";
+SQL> 
+SQL> SELECT ItemID, Description, Cost CostFormat, ArtistName
+  2  FROM ITEM
+  3  WHERE Cost > 100;
+
+    ITEMID DESCRIPTION                                            COST ARTISTNAME                                                                                                   
+---------- -------------------------------------------------- -------- ----------------------------------------                                                                     
+         1 Gold Bracelet                                       $120.00 Mary Josephson                                                                                               
+         4 Gold Bracelet                                       $180.00 Baker                                                                                                        
+         9 Gold Necklace                                       $160.00 John Lintz                                                                                                   
+        13 Gold Necklace                                       $225.00 John Lintz                                                                                                   
+        15 Gold Bracelet                                       $200.00 John Lintz                                                                                                   
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 9:
+SQL> 
+SQL> COLUMN CostFormat FORMAT $999.99 HEADING "COST";
+SQL> 
+SQL> SELECT ItemID, Description, Cost CostFormat, ArtistName
+  2  FROM ITEM
+  3  WHERE Cost = 160 AND ArtistName LIKE 'Jo%';
+
+    ITEMID DESCRIPTION                                            COST ARTISTNAME                                                                                                   
+---------- -------------------------------------------------- -------- ----------------------------------------                                                                     
+         9 Gold Necklace                                       $160.00 John Lintz                                                                                                   
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 10:
+SQL> 
+SQL> SELECT InvoiceNumber, COUNT(ItemID) AS "NUMBER OF DIF. ITEMS"
+  2  FROM PURCHASE_ITEM
+  3  HAVING COUNT(*) > 1
+  4  GROUP BY InvoiceNumber
+  5  ORDER BY InvoiceNumber;
+
+INVOICENUMBER NUMBER OF DIF. ITEMS                                                                                                                                                  
+------------- --------------------                                                                                                                                                  
+            4                    2                                                                                                                                                  
+            5                    2                                                                                                                                                  
+            8                    3                                                                                                                                                  
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> SPOOL OFF;

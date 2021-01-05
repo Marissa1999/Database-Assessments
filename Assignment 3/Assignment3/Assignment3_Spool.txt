@@ -1,0 +1,634 @@
+SQL> 
+SQL> 
+SQL> --Part I:
+SQL> 
+SQL> 
+SQL> --Question 1:
+SQL> 
+SQL> SELECT *
+  2  FROM TRANSACTION
+  3  WHERE CUSTID = '5555666';
+
+     TXNID ACCOUNTI CUSTID  LOCID TXNDATE      AMTWITH     AMTDEP     CHARGE
+---------- -------- ------- ----- --------- ---------- ---------- ----------
+         5 007-1224 5555666 BR012 13-OCT-09        350          0
+         9 007-3679 5555666 BR007 03-OCT-09        140          0
+
+2 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 2:
+SQL> 
+SQL> SELECT *
+  2  FROM TRANSACTION
+  3  WHERE LOCID = 'BR007';
+
+     TXNID ACCOUNTI CUSTID  LOCID TXNDATE      AMTWITH     AMTDEP     CHARGE
+---------- -------- ------- ----- --------- ---------- ---------- ----------
+         1 007-2312 1234321 BR007 09-OCT-09        100        250
+         2 007-2312 1234321 BR007 07-OCT-09         40          0
+         4 007-1224 1234321 BR007 01-OCT-09          0        500
+         9 007-3679 5555666 BR007 03-OCT-09        140          0
+
+4 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 3:
+SQL> 
+SQL> SELECT *
+  2  FROM TRANSACTION
+  3  WHERE TXNDATE >= TO_DATE('09-10-09', 'YY-MM-DD') AND TXNDATE <= TO_DATE('09-10-16', 'YY-MM-DD');
+
+     TXNID ACCOUNTI CUSTID  LOCID TXNDATE      AMTWITH     AMTDEP     CHARGE
+---------- -------- ------- ----- --------- ---------- ---------- ----------
+         1 007-2312 1234321 BR007 09-OCT-09        100        250
+         5 007-1224 5555666 BR012 13-OCT-09        350          0
+         6 007-1414 9879879 ATM23 15-OCT-09         15          0          1
+
+3 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 4:
+SQL> 
+SQL> SELECT *
+  2  FROM TRANSACTION
+  3  WHERE CUSTID = '1234321' AND ACCOUNTID = '007-2312'
+  4  ORDER BY TXNDATE DESC;
+
+     TXNID ACCOUNTI CUSTID  LOCID TXNDATE      AMTWITH     AMTDEP     CHARGE
+---------- -------- ------- ----- --------- ---------- ---------- ----------
+         1 007-2312 1234321 BR007 09-OCT-09        100        250
+         2 007-2312 1234321 BR007 07-OCT-09         40          0
+         3 007-2312 1234321 OTHER 03-OCT-09         20          0        2.5
+
+3 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 5:
+SQL> 
+SQL> SELECT ACCOUNTID
+  2  FROM TRANSACTION
+  3  WHERE AMTWITH <> 0
+  4  GROUP BY ACCOUNTID;
+
+ACCOUNTI
+--------
+007-1414
+007-3679
+007-1224
+007-2312
+
+4 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 6:
+SQL> 
+SQL> SELECT TXNID, (TXNDATE + 5) AS "TRANSACTION DATE"
+  2  FROM TRANSACTION
+  3  WHERE CHARGE = 2.5;
+
+     TXNID TRANSACTI
+---------- ---------
+         3 08-OCT-09
+         7 24-OCT-09
+
+2 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Part II:
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 1:
+SQL> 
+SQL> SELECT TXNID
+  2  FROM TRANSACTION
+  3  WHERE AMTDEP <> 0;
+
+     TXNID
+----------
+         1
+         4
+         8
+
+3 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 2:
+SQL> 
+SQL> 
+SQL> SELECT TXNID
+  2  FROM TRANSACTION
+  3  WHERE AMTDEP = 0;
+
+     TXNID
+----------
+         2
+         3
+         5
+         6
+         7
+         9
+
+6 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 3:
+SQL> 
+SQL> SELECT MAX(AMTWITH) AS "MAXIMUM WITHDRAWAL", MAX(AMTDEP) AS "MAXIMUM DEPOSIT"
+  2  FROM TRANSACTION
+  3  WHERE LOCID = 'BR007';
+
+MAXIMUM WITHDRAWAL MAXIMUM DEPOSIT
+------------------ ---------------
+               140             500
+
+1 row selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 4:
+SQL> 
+SQL> SELECT AVG(AMTWITH) AS "AVERAGE WITHDRAWAL"
+  2  FROM TRANSACTION;
+
+AVERAGE WITHDRAWAL
+------------------
+                85
+
+1 row selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 5:
+SQL> 
+SQL> SELECT COUNT(*) AS "TRANSACTIONS ON OCTOBER 1ST"
+  2  FROM TRANSACTION
+  3  WHERE TXNDATE = TO_DATE('09-10-01', 'YY-MM-DD');
+
+TRANSACTIONS ON OCTOBER 1ST
+---------------------------
+                          2
+
+1 row selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 6:
+SQL> 
+SQL> SELECT COUNT(*) AS "NON-BRANCH TRANSACTIONS"
+  2  FROM TRANSACTION
+  3  WHERE LOCID NOT LIKE 'BR%';
+
+NON-BRANCH TRANSACTIONS
+-----------------------
+                      3
+
+1 row selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 7:
+SQL> 
+SQL> SELECT ACCOUNTID, (AMTDEP - AMTWITH) AS "ACCOUNT BALANCE WITHOUT CHARGE"
+  2  FROM TRANSACTION;
+
+ACCOUNTI ACCOUNT BALANCE WITHOUT CHARGE
+-------- ------------------------------
+007-2312                            150
+007-2312                            -40
+007-2312                            -20
+007-1224                            500
+007-1224                           -350
+007-1414                            -15
+007-1414                           -100
+007-1414                            300
+007-3679                           -140
+
+9 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Part III:
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 1:
+SQL> 
+SQL> SELECT ACCOUNTID, (AMTDEP - AMTWITH - NVL(CHARGE, 0)) AS "ACCOUNT BALANCE WITH CHARGE"
+  2  FROM TRANSACTION;
+
+ACCOUNTI ACCOUNT BALANCE WITH CHARGE
+-------- ---------------------------
+007-2312                         150
+007-2312                         -40
+007-2312                       -22.5
+007-1224                         500
+007-1224                        -350
+007-1414                         -16
+007-1414                      -102.5
+007-1414                         300
+007-3679                        -140
+
+9 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 2:
+SQL> 
+SQL> SELECT ACCOUNTID, ADD_MONTHS(TXNDATE, 1) AS "NOVEMBER TRANSACTIONS", AMTDEP, AMTWITH, CHARGE
+  2  FROM TRANSACTION
+  3  WHERE CUSTID = '5555666';
+
+ACCOUNTI NOVEMBER      AMTDEP    AMTWITH     CHARGE
+-------- --------- ---------- ---------- ----------
+007-1224 13-NOV-09          0        350
+007-3679 03-NOV-09          0        140
+
+2 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 3:
+SQL> 
+SQL> SELECT SUM(AMTDEP - AMTWITH - NVL(CHARGE,0)) AS "TOTAL TRANSACTION CHANGE"
+  2  FROM TRANSACTION
+  3  WHERE ACCOUNTID = '007-2312';
+
+TOTAL TRANSACTION CHANGE
+------------------------
+                    87.5
+
+1 row selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Part IV:
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 1:
+SQL> 
+SQL> 
+SQL> --Sub-Query:
+SQL> 
+SQL> SELECT FIRST_NAME, LAST_NAME
+  2  FROM EMPLOYEES
+  3  WHERE DEPARTMENT_ID = (SELECT DEPARTMENT_ID
+  4     FROM DEPARTMENTS
+  5     WHERE DEPARTMENT_NAME = 'Accounting')
+  6  ORDER BY LAST_NAME;
+
+FIRST_NAME           LAST_NAME
+-------------------- -------------------------
+William              Gietz
+Shelley              Higgins
+
+2 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Explicit Join:
+SQL> 
+SQL> SELECT FIRST_NAME, LAST_NAME
+  2  FROM EMPLOYEES INNER JOIN DEPARTMENTS USING(DEPARTMENT_ID)
+  3  WHERE DEPARTMENT_NAME = 'Accounting'
+  4  ORDER BY LAST_NAME;
+
+FIRST_NAME           LAST_NAME
+-------------------- -------------------------
+William              Gietz
+Shelley              Higgins
+
+2 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 2:
+SQL> 
+SQL> 
+SQL> --Sub-Query:
+SQL> 
+SQL> SELECT FIRST_NAME, LAST_NAME, TRUNC(((SYSDATE - HIRE_DATE) / 365.25), 0) AS "SENIORITY"
+  2  FROM EMPLOYEES
+  3  WHERE DEPARTMENT_ID = (SELECT DEPARTMENT_ID
+  4     FROM DEPARTMENTS
+  5     WHERE DEPARTMENT_NAME = 'Accounting')
+  6  ORDER BY LAST_NAME;
+
+FIRST_NAME           LAST_NAME                  SENIORITY
+-------------------- ------------------------- ----------
+William              Gietz                             24
+Shelley              Higgins                           24
+
+2 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Implicit Join:
+SQL> 
+SQL> SELECT E.FIRST_NAME, E.LAST_NAME, TRUNC(((SYSDATE - HIRE_DATE) / 365.25), 0) AS "SENIORITY"
+  2  FROM EMPLOYEES E, DEPARTMENTS D
+  3  WHERE E.DEPARTMENT_ID = D.DEPARTMENT_ID AND DEPARTMENT_NAME = 'Accounting'
+  4  ORDER BY LAST_NAME;
+
+FIRST_NAME           LAST_NAME                  SENIORITY
+-------------------- ------------------------- ----------
+William              Gietz                             24
+Shelley              Higgins                           24
+
+2 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 3:
+SQL> 
+SQL> 
+SQL> --Implicit Join:
+SQL> 
+SQL> SELECT D.DEPARTMENT_NAME, COUNT(*) AS "EMPLOYEES NUMBER"
+  2  FROM EMPLOYEES E, DEPARTMENTS D
+  3  WHERE E.DEPARTMENT_ID = D.DEPARTMENT_ID
+  4  GROUP BY D.DEPARTMENT_NAME;
+
+DEPARTMENT_NAME                EMPLOYEES NUMBER
+------------------------------ ----------------
+Administration                                1
+Accounting                                    2
+Purchasing                                    6
+Human Resources                               1
+IT                                            5
+Public Relations                              1
+Executive                                     3
+Shipping                                     45
+Sales                                        34
+Finance                                       6
+Marketing                                     2
+
+11 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> --Explicit Join:
+SQL> 
+SQL> SELECT DEPARTMENT_NAME, COUNT(*) AS "EMPLOYEES NUMBER"
+  2  FROM EMPLOYEES
+  3  INNER JOIN DEPARTMENTS
+  4  USING (DEPARTMENT_ID)
+  5  GROUP BY DEPARTMENT_NAME;
+
+DEPARTMENT_NAME                EMPLOYEES NUMBER
+------------------------------ ----------------
+Administration                                1
+Accounting                                    2
+Purchasing                                    6
+Human Resources                               1
+IT                                            5
+Public Relations                              1
+Executive                                     3
+Shipping                                     45
+Sales                                        34
+Finance                                       6
+Marketing                                     2
+
+11 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 4:
+SQL> 
+SQL> 
+SQL> --Implicit Join:
+SQL> 
+SQL> SELECT DEPARTMENT_NAME
+  2  FROM (SELECT D.DEPARTMENT_NAME
+  3        FROM EMPLOYEES E, DEPARTMENTS D
+  4    WHERE E.DEPARTMENT_ID = D.DEPARTMENT_ID
+  5    ORDER BY E.SALARY DESC)
+  6  WHERE ROWNUM = 1;
+
+DEPARTMENT_NAME
+------------------------------
+Executive
+
+1 row selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> --Explicit Join:
+SQL> 
+SQL> SELECT DEPARTMENT_NAME
+  2  FROM (SELECT DEPARTMENT_NAME
+  3        FROM EMPLOYEES
+  4    INNER JOIN DEPARTMENTS
+  5    USING(DEPARTMENT_ID)
+  6    ORDER BY SALARY DESC)
+  7  WHERE ROWNUM = 1;
+
+DEPARTMENT_NAME
+------------------------------
+Executive
+
+1 row selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 5:
+SQL> 
+SQL> 
+SQL> --Sub-Query:
+SQL> 
+SQL> SELECT FIRST_NAME, LAST_NAME
+  2  FROM (SELECT FIRST_NAME, LAST_NAME
+  3    FROM EMPLOYEES
+  4    WHERE DEPARTMENT_ID = (SELECT DEPARTMENT_ID
+  5   FROM DEPARTMENTS
+  6   WHERE DEPARTMENT_NAME = 'Finance')
+  7    ORDER BY SALARY ASC)
+  8  WHERE ROWNUM = 1;
+
+FIRST_NAME           LAST_NAME
+-------------------- -------------------------
+Luis                 Popp
+
+1 row selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Explicit Join:
+SQL> 
+SQL> SELECT FIRST_NAME, LAST_NAME
+  2  FROM (SELECT FIRST_NAME, LAST_NAME
+  3    FROM EMPLOYEES
+  4    INNER JOIN DEPARTMENTS
+  5    USING (DEPARTMENT_ID)
+  6        WHERE DEPARTMENT_NAME = 'Finance'
+  7    ORDER BY SALARY ASC)
+  8  WHERE ROWNUM = 1;
+
+FIRST_NAME           LAST_NAME
+-------------------- -------------------------
+Luis                 Popp
+
+1 row selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 6:
+SQL> 
+SQL> 
+SQL> --Sub-Query
+SQL> 
+SQL> SELECT FIRST_NAME, LAST_NAME
+  2  FROM EMPLOYEES
+  3  WHERE MANAGER_ID = (SELECT MANAGER_ID
+  4  FROM EMPLOYEES
+  5  WHERE LAST_NAME = 'Himuro');
+
+FIRST_NAME           LAST_NAME
+-------------------- -------------------------
+Alexander            Khoo
+Shelli               Baida
+Sigal                Tobias
+Guy                  Himuro
+Karen                Colmenares
+
+5 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Implicit Join:
+SQL> 
+SQL> SELECT E.FIRST_NAME, E.LAST_NAME
+  2  FROM EMPLOYEES E, EMPLOYEES M
+  3  WHERE E.MANAGER_ID = M.MANAGER_ID AND M.LAST_NAME = 'Himuro';
+
+FIRST_NAME           LAST_NAME
+-------------------- -------------------------
+Alexander            Khoo
+Shelli               Baida
+Sigal                Tobias
+Guy                  Himuro
+Karen                Colmenares
+
+5 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> SPOOL OFF;

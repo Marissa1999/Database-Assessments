@@ -1,0 +1,255 @@
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> -- Question 1:
+SQL> 
+SQL> CREATE TABLE customers
+  2  (CustomerId CHAR(12),
+  3  FirstName VARCHAR2(15) CONSTRAINT customers_firstname_nn NOT NULL,
+  4  LastName VARCHAR2(15) CONSTRAINT customers_lastname_nn NOT NULL,
+  5  PhoneNumber CHAR(18) CONSTRAINT customers_phonenumber_uk UNIQUE,
+  6  Address VARCHAR2(40) CONSTRAINT customers_address_uk UNIQUE,
+  7  City VARCHAR2(15),
+  8  Province CHAR(10),
+  9  PostalCode CHAR(14) CONSTRAINT customers_postalcode_uk UNIQUE,
+ 10  LoyaltyRating NUMBER(16) DEFAULT 1,
+ 11  CONSTRAINT customers_loyaltyrating_check CHECK (LoyaltyRating >= 1 AND LoyaltyRating <= 5),
+ 12  CONSTRAINT customers_customerid_pk PRIMARY KEY (CustomerId));
+
+Table created.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> CREATE TABLE orders
+  2  (OrderId CHAR(12),
+  3  CustomerId CHAR(12) CONSTRAINT orders_customerid_nnuk NOT NULL UNIQUE,
+  4  OrderDate DATE CONSTRAINT orders_orderdate_nn NOT NULL,
+  5  OrderTime CHAR(14) CONSTRAINT orders_ordertime_nn NOT NULL,
+  6  SmallPizzas NUMBER(30) CONSTRAINT orders_smallpizzas_nn NOT NULL,
+  7  MediumPizzas NUMBER(30) CONSTRAINT orders_mediumpizzas_nn NOT NULL,
+  8  LargePizzas NUMBER(30) CONSTRAINT orders_largepizzas_nn NOT NULL,
+  9  ExtraLargePizzas NUMBER(30) CONSTRAINT orders_extralargepizzas_nn NOT NULL,
+ 10  CONSTRAINT orders_orderid_pk PRIMARY KEY (OrderId),
+ 11  CONSTRAINT orders_customerid_fk FOREIGN KEY (CustomerId) REFERENCES customers(CustomerId));
+
+Table created.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 2:
+SQL> 
+SQL> DESCRIBE customers;
+ Name                                                                                                  Null?    Type
+ ----------------------------------------------------------------------------------------------------- -------- --------------------------------------------------------------------
+ CUSTOMERID                                                                                            NOT NULL CHAR(12)
+ FIRSTNAME                                                                                             NOT NULL VARCHAR2(15)
+ LASTNAME                                                                                              NOT NULL VARCHAR2(15)
+ PHONENUMBER                                                                                                    CHAR(18)
+ ADDRESS                                                                                                        VARCHAR2(40)
+ CITY                                                                                                           VARCHAR2(15)
+ PROVINCE                                                                                                       CHAR(10)
+ POSTALCODE                                                                                                     CHAR(14)
+ LOYALTYRATING                                                                                                  NUMBER(16)
+
+SQL> 
+SQL> DESCRIBE orders;
+ Name                                                                                                  Null?    Type
+ ----------------------------------------------------------------------------------------------------- -------- --------------------------------------------------------------------
+ ORDERID                                                                                               NOT NULL CHAR(12)
+ CUSTOMERID                                                                                            NOT NULL CHAR(12)
+ ORDERDATE                                                                                             NOT NULL DATE
+ ORDERTIME                                                                                             NOT NULL CHAR(14)
+ SMALLPIZZAS                                                                                           NOT NULL NUMBER(30)
+ MEDIUMPIZZAS                                                                                          NOT NULL NUMBER(30)
+ LARGEPIZZAS                                                                                           NOT NULL NUMBER(30)
+ EXTRALARGEPIZZAS                                                                                      NOT NULL NUMBER(30)
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 3:
+SQL> 
+SQL> INSERT INTO customers (CustomerId, FirstName, LastName, PhoneNumber, Address, City, Province, PostalCode)
+  2  VALUES ('02345', 'Mary', 'Fair', '(519) 477-3912', '2395 Baker Street', 'Owen Sound', 'ON', 'N0N 0N0');
+
+1 row created.
+
+SQL> 
+SQL> INSERT INTO customers (CustomerId, FirstName, LastName, PhoneNumber, Address, City, Province, PostalCode)
+  2  VALUES ('02346', 'Nellie', 'Weldon', '(647) 281-3119', '1453 Front Street', 'Toronto', 'ON', 'M5J 2N1');
+
+1 row created.
+
+SQL> 
+SQL> INSERT INTO customers (CustomerId, FirstName, LastName, PhoneNumber, Address, City, Province, PostalCode)
+  2  VALUES ('02347', 'Joseph', 'Rudisill', '(709) 621-4593', '4394 Glencoe Drive', 'Change Islands', 'NL', 'A1C 5H6');
+
+1 row created.
+
+SQL> 
+SQL> INSERT INTO customers (CustomerId, FirstName, LastName, PhoneNumber, Address, City, Province, PostalCode)
+  2  VALUES ('02348', 'Gina', 'Watkins', '(306) 275-8785', '3907 Main St.', 'St. Brieux', 'SK', 'S0K 3V0');
+
+1 row created.
+
+SQL> 
+SQL> INSERT INTO customers (CustomerId, FirstName, LastName, PhoneNumber, Address, City, Province, PostalCode)
+  2  VALUES ('02349', 'Nancy', 'Munroe', '(819) 734-5032', '2612 Rue des glises Est.', 'Barraute', 'QC', 'J0Y 1A0');
+
+1 row created.
+
+SQL> 
+SQL> INSERT INTO customers (CustomerId, FirstName, LastName, PhoneNumber, Address, City, Province, PostalCode)
+  2  VALUES ('02350', 'Bernard', 'Conroy', '(613) 628-3734', '321 Reserve St.', 'Eganville', 'ON', 'K0J 1T0');
+
+1 row created.
+
+SQL> 
+SQL> INSERT INTO customers (CustomerId, FirstName, LastName, PhoneNumber, Address, City, Province, PostalCode)
+  2  VALUES ('02351', 'Theodore', 'Delgado', '(905) 405-8225', '2186 Derry Rd.', 'Malton', 'ON', 'L4T 1A8');
+
+1 row created.
+
+SQL> 
+SQL> INSERT INTO customers (CustomerId, FirstName, LastName, PhoneNumber, Address, City, Province, PostalCode)
+  2  VALUES ('02352', 'Michael', 'Burnett', '(416) 547-8779', '567 Eglinton Avenue', 'Toronto', 'ON', 'M4P 1A6');
+
+1 row created.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> INSERT INTO orders VALUES ('00137', '02345', TO_DATE ('05/10/2018', 'MM/DD/YYYY'), '12:25:39 PM', 3, 0, 1, 0);
+
+1 row created.
+
+SQL> INSERT INTO orders VALUES ('00138', '02346', TO_DATE ('06/13/2018', 'MM/DD/YYYY'), '01:10:23 PM', 2, 2, 0, 0);
+
+1 row created.
+
+SQL> INSERT INTO orders VALUES ('00139', '02347', TO_DATE ('06/29/2018', 'MM/DD/YYYY'), '01:03:46 PM', 1, 3, 0, 1);
+
+1 row created.
+
+SQL> INSERT INTO orders VALUES ('00140', '02348', TO_DATE ('07/05/2018', 'MM/DD/YYYY'), '05:16:57 PM', 2, 2, 0, 2);
+
+1 row created.
+
+SQL> INSERT INTO orders VALUES ('00141', '02349', TO_DATE ('07/19/2018', 'MM/DD/YYYY'), '11:48:02 AM', 1, 0, 0, 0);
+
+1 row created.
+
+SQL> INSERT INTO orders VALUES ('00142', '02350', TO_DATE ('07/30/2018', 'MM/DD/YYYY'), '11:32:13 AM', 0, 1, 0, 2);
+
+1 row created.
+
+SQL> INSERT INTO orders VALUES ('00143', '02351', TO_DATE ('08/07/2018', 'MM/DD/YYYY'), '01:50:59 PM', 3, 1, 1, 1);
+
+1 row created.
+
+SQL> INSERT INTO orders VALUES ('00144', '02352', TO_DATE ('08/24/2018', 'MM/DD/YYYY'), '06:27:22 PM', 2, 3, 0, 1);
+
+1 row created.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 4:
+SQL> 
+SQL> SELECT CustomerId as "Customer ID", FirstName as "First Name", LastName as "Last Name", PhoneNumber as "Phone Number",
+  2         Address as "Address", City as "City", Province as "Province", PostalCode as "Postal Code", LoyaltyRating as "Loyalty Rating"
+  3  FROM customers;
+
+Customer ID  First Name      Last Name       Phone Number       Address                                  City            Province   Postal Code    Loyalty Rating                   
+------------ --------------- --------------- ------------------ ---------------------------------------- --------------- ---------- -------------- --------------                   
+02345        Mary            Fair            (519) 477-3912     2395 Baker Street                        Owen Sound      ON         N0N 0N0                     1                   
+02346        Nellie          Weldon          (647) 281-3119     1453 Front Street                        Toronto         ON         M5J 2N1                     1                   
+02347        Joseph          Rudisill        (709) 621-4593     4394 Glencoe Drive                       Change Islands  NL         A1C 5H6                     1                   
+02348        Gina            Watkins         (306) 275-8785     3907 Main St.                            St. Brieux      SK         S0K 3V0                     1                   
+02349        Nancy           Munroe          (819) 734-5032     2612 Rue des Eglises Est.                Barraute        QC         J0Y 1A0                     1                   
+02350        Bernard         Conroy          (613) 628-3734     321 Reserve St.                          Eganville       ON         K0J 1T0                     1                   
+02351        Theodore        Delgado         (905) 405-8225     2186 Derry Rd.                           Malton          ON         L4T 1A8                     1                   
+02352        Michael         Burnett         (416) 547-8779     567 Eglinton Avenue                      Toronto         ON         M4P 1A6                     1                   
+
+8 rows selected.
+
+SQL> 
+SQL> 
+SQL> SELECT OrderId as "Order ID", CustomerId as "Customer ID", OrderDate as "Date", OrderTime as "Time",
+  2         SmallPizzas as "# of Small Pizzas", MediumPizzas as "# of Medium Pizzas",
+  3     LargePizzas as "# of Large Pizzas", ExtraLargePizzas as "# of Extra Large Pizzas"
+  4  FROM orders;
+
+Order ID     Customer ID  Date      Time           # of Small Pizzas # of Medium Pizzas # of Large Pizzas # of Extra Large Pizzas                                                   
+------------ ------------ --------- -------------- ----------------- ------------------ ----------------- -----------------------                                                   
+00137        02345        10-MAY-18 12:25:39 PM                    3                  0                 1                       0                                                   
+00138        02346        13-JUN-18 01:10:23 PM                    2                  2                 0                       0                                                   
+00139        02347        29-JUN-18 01:03:46 PM                    1                  3                 0                       1                                                   
+00140        02348        05-JUL-18 05:16:57 PM                    2                  2                 0                       2                                                   
+00141        02349        19-JUL-18 11:48:02 AM                    1                  0                 0                       0                                                   
+00142        02350        30-JUL-18 11:32:13 AM                    0                  1                 0                       2                                                   
+00143        02351        07-AUG-18 01:50:59 PM                    3                  1                 1                       1                                                   
+00144        02352        24-AUG-18 06:27:22 PM                    2                  3                 0                       1                                                   
+
+8 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Question 5:
+SQL> 
+SQL> SELECT table_name, constraint_name, constraint_type
+  2  FROM user_constraints
+  3  WHERE table_name = 'CUSTOMERS';
+
+TABLE_NAME                     CONSTRAINT_NAME                C                                                                                                                     
+------------------------------ ------------------------------ -                                                                                                                     
+CUSTOMERS                      CUSTOMERS_LOYALTYRATING_CHECK  C                                                                                                                     
+CUSTOMERS                      CUSTOMERS_CUSTOMERID_PK        P                                                                                                                     
+CUSTOMERS                      CUSTOMERS_PHONENUMBER_UK       U                                                                                                                     
+CUSTOMERS                      CUSTOMERS_ADDRESS_UK           U                                                                                                                     
+CUSTOMERS                      CUSTOMERS_POSTALCODE_UK        U                                                                                                                     
+CUSTOMERS                      CUSTOMERS_FIRSTNAME_NN         C                                                                                                                     
+CUSTOMERS                      CUSTOMERS_LASTNAME_NN          C                                                                                                                     
+
+7 rows selected.
+
+SQL> 
+SQL> 
+SQL> SELECT table_name, constraint_name, constraint_type
+  2  FROM user_constraints
+  3  WHERE table_name = 'ORDERS';
+
+TABLE_NAME                     CONSTRAINT_NAME                C                                                                                                                     
+------------------------------ ------------------------------ -                                                                                                                     
+ORDERS                         ORDERS_CUSTOMERID_NNUK         C                                                                                                                     
+ORDERS                         ORDERS_ORDERDATE_NN            C                                                                                                                     
+ORDERS                         ORDERS_ORDERTIME_NN            C                                                                                                                     
+ORDERS                         ORDERS_SMALLPIZZAS_NN          C                                                                                                                     
+ORDERS                         ORDERS_MEDIUMPIZZAS_NN         C                                                                                                                     
+ORDERS                         ORDERS_LARGEPIZZAS_NN          C                                                                                                                     
+ORDERS                         ORDERS_EXTRALARGEPIZZAS_NN     C                                                                                                                     
+ORDERS                         ORDERS_ORDERID_PK              P                                                                                                                     
+ORDERS                         SYS_C007141                    U                                                                                                                     
+ORDERS                         ORDERS_CUSTOMERID_FK           R                                                                                                                     
+
+10 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> SPOOL OFF;
